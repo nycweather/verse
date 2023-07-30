@@ -4,11 +4,11 @@
 from flask import Blueprint, jsonify
 
 # Create a Blueprint for 'blog' API endpoints.
-blog_bp = Blueprint('blog', __name__)
+article_bp = Blueprint('article', __name__)
 
 # Define API endpoints here (e.g., CRUD for blog posts).
 
-@blog_bp.route('/posts', methods=['GET'])
+@article_bp.route('/posts', methods=['GET'])
 def get_all_posts():
     # Implement logic to retrieve all blog posts from the database.
     # Return the list of posts as a JSON response.

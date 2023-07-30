@@ -1,8 +1,9 @@
-# app.py
-
 from flask import Flask, jsonify
 from flask_cors import CORS
-from dotenv import load_dotenv   # Import load_dotenv
+from dotenv import load_dotenv 
+
+# Import load_dotenv
+import os
 
 def create_app():
     app = Flask(__name__)
@@ -15,15 +16,17 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_CONNECTION_STRING')
 
     # Initialize the database using the 'db' object from 'app.database.db'
-    from app.database.db import db
-    db.init_app(app)
+    # from app.database.db import db
+    # db.init_app(app)
 
     # Register API blueprints
-    from app.api.blog.views import blog_bp
+    from app.api.article.views import article_bp
     from app.api.user.views import user_bp
     from app.api.authentication.views import auth_bp
+    from app.api.home.views import home_bp
 
-    app.register_blueprint(blog_bp, url_prefix='/api/blog')
+    app.register_blueprint(home_bp, url_prefix='/api')
+    app.register_blueprint(article_bp, url_prefix='/api/article')
     app.register_blueprint(user_bp, url_prefix='/api/user')
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
 
@@ -34,4 +37,4 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=True)
+    app.run(debug=True, host='127.0.0.1', port=8080)
