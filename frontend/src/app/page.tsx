@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-function Home() {
+function Index() {
   const [data, setData] = useState("Loading...");
   useEffect(() => {
     const fetchData = async () => {
@@ -29,4 +29,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Index;

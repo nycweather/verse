@@ -34,6 +34,12 @@
 
     - `views.py`: Defines the API endpoints for authentication (e.g., login, registration).
 
+- `app/api/home/`: The package for handling home page-related API components (e.g., featured articles).
+
+    - `__init__.py`: The initialization file for the home package.
+
+    - `views.py`: Defines the API endpoints for home page-related operations (e.g., featured articles).
+
 - `app/config/`: The package for application configuration settings.
 
     - `__init__.py`: The initialization file for the configuration package.
