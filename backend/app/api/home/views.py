@@ -10,3 +10,4 @@ home_bp = Blueprint('home', __name__)
 def index():
     # Render the 'index.html' template for the homepage
     return {'message': 'Home Page!'}
+

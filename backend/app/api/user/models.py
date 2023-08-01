@@ -14,6 +14,8 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now(pytz.timezone('EST')))
     updated_at = db.Column(db.DateTime, onupdate=datetime.now(pytz.timezone('EST')))
     articles = db.relationship('Article', backref='user', lazy=True)
+    latest_login = db.Column(db.DateTime, default=datetime.now(pytz.timezone('EST')))
+    admin_level = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return f'<User {self.username}>'
