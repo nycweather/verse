@@ -1,13 +1,13 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_cors import CORS
-from dotenv import load_dotenv 
-
-# Import load_dotenv
+from dotenv import load_dotenv
 import os
+
+from app.database.db import db, init_db
 
 def create_app():
     app = Flask(__name__)
-    
+
     # Load configuration settings from '.env' file
     load_dotenv('.env')
 
@@ -16,8 +16,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_CONNECTION_STRING')
 
     # Initialize the database using the 'db' object from 'app.database.db'
-    # from app.database.db import db
-    # db.init_app(app)
+    init_db(app)
 
     # Register API blueprints
     from app.api.article.views import article_bp
@@ -32,6 +31,10 @@ def create_app():
 
     # Enable CORS for all API routes
     CORS(app)
+
+    with app.app_context():
+        # Create the database tables if they don't exist
+        db.create_all()
 
     return app
 

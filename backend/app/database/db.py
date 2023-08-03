@@ -1,8 +1,14 @@
-# db.py
-
 from flask_sqlalchemy import SQLAlchemy
 import os
-from dotenv import load_dotenv  # Import load_dotenv
+from dotenv import load_dotenv
+
+# Initialize the SQLAlchemy instance
+db = SQLAlchemy()
+
+from app.api.article.models import Article
+from app.api.user.models import User
+from app.api.home.models import Popular
+
 
 # Load the environment variables from the '.env' file
 load_dotenv('.env')
@@ -10,8 +16,6 @@ load_dotenv('.env')
 # Get the database connection string from the environment variable
 DB_CONNECTION_STRING = os.getenv('DB_CONNECTION_STRING')
 
-# Initialize the SQLAlchemy instance
-db = SQLAlchemy()
 
 def init_db(app):
     # Set the database URI from the environment variable
