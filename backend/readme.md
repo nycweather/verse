@@ -1,4 +1,4 @@
-## Folder Structure for Flask REST API - Article Website
+## Folder Structure for Flask REST API - Verse Website
 
 - `app/`: The main application package.
 
