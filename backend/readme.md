@@ -1,4 +1,4 @@
-## Folder Structure for Flask REST API - Article Website
+## Folder Structure for Flask REST API - Verse Website
 
 - `app/`: The main application package.
 
@@ -38,6 +38,8 @@
 
     - `__init__.py`: The initialization file for the home package.
 
+    - `models.py`: Contains the database models for home page-related data (e.g., `FeaturedArticle`).
+
     - `views.py`: Defines the API endpoints for home page-related operations (e.g., featured articles).
 
 - `app/config/`: The package for application configuration settings.
@@ -46,17 +48,17 @@
 
     - `settings.py`: Contains configuration settings (e.g., database settings, API settings).
 
-- `app/utils/`: The package for utility functions or helper functions used throughout the application.
-
-    - `__init__.py`: The initialization file for the utils package.
-
-    - `helpers.py`: Contains utility functions that can be used across the app.
-
 - `app/database/`: The package for managing the database and its setup.
 
     - `__init__.py`: The initialization file for the database package.
 
     - `db.py`: Contains functions for setting up and initializing the database.
+
+- `app/utils/`: The package for utility functions or helper functions used throughout the application.
+
+    - `__init__.py`: The initialization file for the utils package.
+
+    - `helpers.py`: Contains utility functions that can be used across the app.
 
 - `app/migrations/`: If you're using a database ORM like SQLAlchemy, this folder can contain database migration files to manage database schema changes over time.
 
