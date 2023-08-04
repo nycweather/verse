@@ -4,7 +4,9 @@ import re
 
 from flask import Blueprint, jsonify, request
 
+from app.database.db import db
 from app.utils.http_constants import HTTP_CODES
+from app.api.user.models import User
 
 # Create a Blueprint for 'authentication' API endpoints.
 auth_bp = Blueprint('authentication', __name__)
@@ -33,8 +35,29 @@ def register():
     email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     if not re.match(email_pattern, email) and len(email) < 9:
         return jsonify({'message': 'Invalid email!'}), HTTP_CODES.HTTP_400_BAD_REQUEST
+    # Checking if user already exists
+    user_check = User.query.filter_by(username=username).first()
+    if user_check:
+        return jsonify({'message': 'User already exists!'}), HTTP_CODES.HTTP_400_BAD_REQUEST
+    #Checking if email already exists
+    email_check = User.query.filter_by(email=email).first()
+    if email_check:
+        return jsonify({'message': 'Email already exists!'}), HTTP_CODES.HTTP_400_BAD_REQUEST
+    # Generating password hash
+    hashed_password = (password)
+    # Creating user
+    user = User(username=username, email=email, password=hashed_password, admin_level=0)
+    db.session.add(user)
+    db.session.commit()
 
-    return jsonify({'message': 'Registration successful!'}), HTTP_CODES.HTTP_200_OK
+    return jsonify({'message': 'User created successfully!',
+                    'user': {
+                        'id': user.id,
+                        'username': user.username,
+                        'email': user.email,
+                        'admin_level': user.admin_level
+                        }
+                    }), HTTP_CODES.HTTP_201_CREATED
 
 
 @auth_bp.route('/login', methods=['POST'])
