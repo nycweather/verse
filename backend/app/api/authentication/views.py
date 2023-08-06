@@ -3,6 +3,8 @@
 import re
 
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
+from flask_bcrypt import Bcrypt
 
 from app.database.db import db
 from app.utils.http_constants import HTTP_CODES
@@ -31,6 +33,9 @@ def register():
     # Checking password
     if len(password) < 6:
         return jsonify({'message': 'Password is too short!'}), HTTP_CODES.HTTP_400_BAD_REQUEST
+    # Checking if password is alphanumeric
+    if password.isalnum() == False:
+        return jsonify({'message': 'Password must be alphanumeric!'}), HTTP_CODES.HTTP_400_BAD_REQUEST
     # Checking email
     email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     if not re.match(email_pattern, email) and len(email) < 9:
@@ -44,7 +49,8 @@ def register():
     if email_check:
         return jsonify({'message': 'Email already exists!'}), HTTP_CODES.HTTP_400_BAD_REQUEST
     # Generating password hash
-    hashed_password = (password)
+    bcrypt = Bcrypt()
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     # Creating user
     user = User(username=username, email=email, password=hashed_password, admin_level=0)
     db.session.add(user)
@@ -63,6 +69,23 @@ def register():
 @auth_bp.route('/login', methods=['POST'])
 def login():
     # Implement logic to handle user login.
-    pass
+    username = request.json.get('username', None)
+    password = request.json.get('password', None)
+    # Check if credentials are valid
+    if not username or not password:
+        return jsonify({'message': 'Username or Password is incorrect!'}), HTTP_CODES.HTTP_400_BAD_REQUEST
+    # Checking if user exists
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return jsonify({'message': 'Username or Password is incorrect!'}), HTTP_CODES.HTTP_400_BAD_REQUEST
+    # Checking if password is correct
+    password_check = Bcrypt().check_password_hash(user.password, password)
+    if not password_check:
+        return jsonify({'message': 'Username or Password is incorrect!'}), HTTP_CODES.HTTP_400_BAD_REQUEST
+    # Setting JWT token
+    return jsonify({
+        'message': 'Logged in successfully!',
+    }), HTTP_CODES.HTTP_200_OK
+
 
 # More API endpoints can be added here for other authentication operations.
