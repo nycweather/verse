@@ -1,7 +1,10 @@
+import os
+
 from flask import Flask
 from flask_cors import CORS
 from dotenv import load_dotenv
-import os
+from flask_jwt_extended import JWTManager
+
 
 from app.database.db import db, init_db
 
@@ -12,11 +15,17 @@ def create_app():
     load_dotenv('.env')
 
     # Set the secret key and database connection from the environment variables
-    app.secret_key = os.getenv('SECRET_KEY')
+    app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_CONNECTION_STRING')
 
     # Initialize the database using the 'db' object from 'app.database.db'
     init_db(app)
+
+    # Initialize the JWT manager
+    JWTManager(app)
+
+    # # Bcrypt
+    # bcrypt = Bcrypt(app)
 
     # Register API blueprints
     from app.api.article.views import article_bp

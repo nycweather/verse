@@ -4,6 +4,10 @@ export default function SignUp() {
   return (
     <>
     <div>SignUp</div>
+    <div>
+      SignUp Form
+    </div>
+    
     </>
   )
 }
