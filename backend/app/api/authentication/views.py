@@ -28,13 +28,13 @@ def register():
     # Checking username
     if len(username) < 4:
         return jsonify({'message': 'Username is too short!'}), HTTP_CODES.HTTP_400_BAD_REQUEST
-    if username.isalnum() == False:
+    if username.isalnum() is False:
         return jsonify({'message': 'Username must be alphanumeric!'}), HTTP_CODES.HTTP_400_BAD_REQUEST
     # Checking password
     if len(password) < 6:
         return jsonify({'message': 'Password is too short!'}), HTTP_CODES.HTTP_400_BAD_REQUEST
     # Checking if password is alphanumeric
-    if password.isalnum() == False:
+    if password.isalnum() is False:
         return jsonify({'message': 'Password must be alphanumeric!'}), HTTP_CODES.HTTP_400_BAD_REQUEST
     # Checking email
     email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
@@ -83,9 +83,22 @@ def login():
     if not password_check:
         return jsonify({'message': 'Username or Password is incorrect!'}), HTTP_CODES.HTTP_400_BAD_REQUEST
     # Setting JWT token
+    refresh = create_refresh_token(identity=user.id)
+    access = create_access_token(identity=user.id)
     return jsonify({
         'message': 'Logged in successfully!',
+        'user': {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'refresh_token': refresh,
+            'access_token': access
+        }
     }), HTTP_CODES.HTTP_200_OK
 
 
+@auth_bp.route('/me', methods=['GET'])
+@jwt_required()
+def me():
+    return jsonify({'message': f'You are logged in as: {get_jwt_identity()}'}), HTTP_CODES.HTTP_200_OK
 # More API endpoints can be added here for other authentication operations.
