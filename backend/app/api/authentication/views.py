@@ -1,6 +1,7 @@
 # This file defines the API endpoints for authentication (e.g., login, registration).
 # It uses Flask's Blueprint to create the 'authentication' API endpoints.
 import re
+from datetime import timedelta
 
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
@@ -96,7 +97,16 @@ def login():
         }
     }), HTTP_CODES.HTTP_200_OK
 
+# Refresh token endpoint
+@auth_bp.route('/refresh', methods=['GET'])
+@jwt_required(refresh=True)
+def refresh():
+    # Implement logic to handle access token refresh.
+    current_user = get_jwt_identity()
+    new_token = create_access_token(identity=current_user, expires_delta=timedelta(hours=1))
+    return jsonify({'access_token': new_token}), HTTP_CODES.HTTP_200_OK
 
+# Logout endpoint
 @auth_bp.route('/me', methods=['GET'])
 @jwt_required()
 def me():
