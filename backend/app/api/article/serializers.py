@@ -7,8 +7,13 @@ from marshmallow import Schema, fields
 
 class CategorySchema(Schema):
     # Define the 'Category' serializer schema here.
-    pass
+    id = fields.Integer()
+    name = fields.String()
+    verified = fields.Boolean()
 
-class PostSchema(Schema):
+class ArticleSchema(Schema):
     # Define the 'Post' serializer schema here.
-    pass
+    title = fields.String()
+    owner_id = fields.Integer()
+    content = fields.String()
+    category_id = fields.Integer()
