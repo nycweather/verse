@@ -20,8 +20,8 @@ class Article(db.Model):
     content = db.Column(db.Text(), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(pytz.timezone('EST')))
     updated_at = db.Column(db.DateTime, onupdate=datetime.now(pytz.timezone('EST')))
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
-    visits = db.Column(db.Integer, nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=True)
+    visits = db.Column(db.Integer, nullable=False, default=0)
 
     def __repr__(self):
         return f'<Article {self.title}\n<Owner {self.owner_id}>\n<Created at {self.created_at}>'
